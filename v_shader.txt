@@ -1,0 +1,10 @@
+#version 330 core
+
+layout (location = 0) in vec3 vecty;
+
+out vec4 ffc;
+
+void main(){
+    gl_Position = vec4(vecty, 1);
+    ffc = vec4(0.72, 0.62, 0.52, 0.7);
+}

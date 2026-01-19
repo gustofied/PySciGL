@@ -1,0 +1,9 @@
+#version 330 core
+
+in vec4 ffc;
+
+out vec4 colors;
+
+void main(){
+    colors = ffc;
+}
