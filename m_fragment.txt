@@ -1,0 +1,8 @@
+#version 330 core
+
+in vec4 frages;
+out vec4 color;
+
+void main(){
+    color = frages;
+    }

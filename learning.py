@@ -13,7 +13,7 @@ glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
 glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, GLFW_CONSTANTS.GLFW_TRUE)
 window = glfw.create_window(300,300, "learnings", None, None)
 glfw.make_context_current(window)
-glfw.swap_interval(0) #vsync something
+# glfw.swap_interval(0) #vsync something
 
 
 GL.glClearColor(0.3, 0.05, 0.15, 0.95)
