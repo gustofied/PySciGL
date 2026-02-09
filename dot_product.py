@@ -19,8 +19,8 @@ def run():
 
 
     my_dir = Path(__file__).resolve().parent
-    v_path = my_dir / "v_shader.txt"
-    f_path = my_dir / "f_shader.txt"
+    v_path = my_dir / "dot_shader_fragment.txt"
+    f_path = my_dir / "dot_shader_vertex.txt"
 
 
     with open(v_path, "r") as file:
