@@ -6,7 +6,7 @@ import glfw.GLFW as GLFW_CONSTANTS
 import time
 import ctypes
 from pathlib import Path
-d
+
 glfw.init()
 glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
 glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
