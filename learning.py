@@ -61,7 +61,7 @@ while not glfw.window_should_close(window):
     new_time = glfw.get_time()
     fps = 1 / (new_time - old_time)
 
-    old_time = glfw.get_time()
+    old_time = new_time
 
     glfw.set_window_title(window, f"FPS: {fps:.2f}")
     
