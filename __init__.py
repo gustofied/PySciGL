@@ -1,2 +1,0 @@
-import dot_product
-
