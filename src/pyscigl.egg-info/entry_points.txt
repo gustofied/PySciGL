@@ -1,0 +1,2 @@
+[console_scripts]
+pyscigl = pyscigl.__main__:app
