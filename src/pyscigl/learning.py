@@ -40,6 +40,62 @@ def run():
             source_code = file.read()
             return compileShader(source_code, module_type)
 
+    class Mat4:
+
+        def __init__(self):
+
+            self.data = np.eye(4, dtype=np.float32)
+
+
+        def from_translation(self, x:float, y:float, z:float) -> "Mat4":
+
+            self.data[3, 0] = x
+            self.data[3, 1] = y
+            self.data[3, 2] = z
+            return self
+
+        def from_z_rotation(self, theta: float) -> "Mat4":
+
+            theta = np.radians(theta)
+            c = np.cos(theta)
+            s = np.sin(theta)
+
+            self.data[0, 0] = c
+            self.data[0, 1] = -s
+            self.data[1, 0] = s
+            self.data[1, 1] = c
+
+            return self
+
+        def __mul__(self, other: "Mat4") -> "Mat4":
+
+            resultant = Mat4()
+            resultant.data = self.data @ other.data
+            return resultant
+
+    class MovingFig:
+
+        def __init__(self):
+            self.t = 0.0
+            self.x_offset = 0.0
+            self.z_angle = 0.0
+
+        def update(self, dt: float) -> None:
+
+            self.t += dt * 100
+            if self.t > 360:
+                self.t -= 360
+
+            self.x_offset = np.sin(np.radians(self.t))
+            self.z_angle = self.t
+
+        def get_transformation(self) -> np.ndarray:
+
+            return (Mat4().from_translation(self.x_offset, 0, 0) * Mat4().from_z_rotation(self.z_angle)).data
+
+            
+
+    fig =  MovingFig()
 
     class Material:
 
@@ -64,15 +120,6 @@ def run():
             GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT)
             GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST)
             GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR)
-
-
-
-
-
-
-
-
-
 
             return self
 
@@ -177,20 +224,29 @@ def run():
             GL.glDeleteBuffers(2, (self.VBO, self.VBO))
 
 
-    class Renderer:
+    class Renderer():
         
-        def __init__(self):
+        def __init__(self, fig: MovingFig):
 
             GL.glClearColor(0.3, 0.05, 0.15, 0.95)
+            self.fig = fig
             self.mesh = Mesh().build_colored_quad()
             self.material = Material().load_from_file("texture.png")
             self.shader = make_shader_programme("learning_shader_vertex.txt", "learning_shader_fragment.txt")
 
-        def draw(self):
+        def draw(self, dt: float):
 
             GL.glClear(GL.GL_COLOR_BUFFER_BIT)
             GL.glUseProgram(self.shader)
             self.material.use()
+
+            self.fig.update(dt)
+            location = GL.glGetUniformLocation(self.shader, "model")
+            GL.glUniformMatrix4fv(location, 1, GL.GL_TRUE, self.fig.get_transformation())
+
+            
+
+
             self.mesh.draw()
 
         def destroy(self):
@@ -200,7 +256,8 @@ def run():
             GL.glDeleteProgram(self.shader)
 
 
-    renderer = Renderer()
+    renderer = Renderer(fig)
+    
 
     old_time = glfw.get_time()
 
@@ -210,13 +267,14 @@ def run():
             glfw.set_window_should_close(window, True)
 
         new_time = glfw.get_time()
-        fps = 1 / (new_time - old_time)
+        dt = new_time - old_time
+        fps = 1 / dt
 
         old_time = new_time
 
         glfw.set_window_title(window, f"FPS: {fps:.2f}")
-        
-        renderer.draw()
+
+        renderer.draw(dt)
 
         glfw.swap_buffers(window)
 
