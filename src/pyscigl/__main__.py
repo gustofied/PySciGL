@@ -1,5 +1,6 @@
 import typer
 from .dot_product import run as run_dot
+from .learning import run as run_learning
 
 app = typer.Typer(help="The PySciGL CLI")
 
@@ -7,6 +8,11 @@ app = typer.Typer(help="The PySciGL CLI")
 def dot() -> None:
     """Run the dot product demo."""
     run_dot()
+
+@app.command()
+def learning() -> None:
+    """Run the dot product demo."""
+    run_learning()
 
 
 @app.command()

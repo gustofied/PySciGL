@@ -1,6 +1,0 @@
-glfw>=2.10.0
-numpy>=2.4.1
-pathlib>=1.0.1
-pyopengl>=3.1.10
-pyopengl-accelerate>=3.1.10
-typer>=0.22.0
